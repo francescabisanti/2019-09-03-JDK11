@@ -111,22 +111,23 @@ public class FoodDao {
 
 	}
 	
-	public List <String> getVertici(Double calorie ){
-		String sql="SELECT DISTINCT p.portion_display_name AS nome "
+	public List <String> getVertici(Integer cal){
+		String sql="SELECT DISTINCT p.portion_display_name AS n "
 				+ "FROM `portion` p "
-				+ "WHERE p.calories< ? "
-				+ "ORDER BY nome ASC ";
+				+ "WHERE p.calories<? "
+				+ "ORDER BY p.portion_display_name ASC ";
+		
 		try {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			st.setDouble(1, calorie);
+			st.setInt(1, cal);
 			List<String> list = new ArrayList<>() ;
 			
 			ResultSet res = st.executeQuery() ;
 			
 			while(res.next()) {
-				list.add(res.getString("nome"));
+				list.add(res.getString("n"));
 			}
 			
 			conn.close();
@@ -136,30 +137,34 @@ public class FoodDao {
 			e.printStackTrace();
 			return null ;
 		}
-	
-	
 	}
 	
-	public List <Adiacenza> getAdiacenza(Double calorie){
-		String sql="SELECT p1.portion_display_name AS nome1, p2.portion_display_name AS nome2, COUNT(DISTINCT p1.food_code) AS peso "
+	public List <Adiacenza> getAdiacenze(Integer cal){
+		String sql="SELECT DISTINCT p1.portion_display_name AS n1, p2.portion_display_name AS n2, COUNT(DISTINCT p1.food_code) AS peso "
 				+ "FROM `portion` p1, `portion` p2 "
-				+ "WHERE p1.food_code=p2.food_code "
-				+ "AND p1.portion_display_name> p2.portion_display_name "
+				+ "WHERE p1.calories<? && p2.calories<? && p1.portion_display_name> p2.portion_display_name AND p1.food_code=p2.food_code "
 				+ "GROUP BY p1.portion_display_name, p2.portion_display_name "
-				+ "HAVING peso>0 ";
-		
+				+ "HAVING peso>0 "
+				+ "";
 		try {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			
+			st.setInt(1, cal);
+			st.setInt(2, cal);
 			List<Adiacenza> list = new ArrayList<>() ;
 			
 			ResultSet res = st.executeQuery() ;
 			
 			while(res.next()) {
-				Adiacenza a= new Adiacenza(res.getString("nome1"), res.getString("nome2"), res.getDouble("peso"));
-				list.add(a);
+				String p1= res.getString("n1");
+				String p2= res.getString("n2");
+				Double peso=res.getDouble("peso");
+				if(p1!=null && p2!=null) {
+					Adiacenza a = new Adiacenza(p1,p2,peso);
+					list.add(a);
+				}
+				
 			}
 			
 			conn.close();

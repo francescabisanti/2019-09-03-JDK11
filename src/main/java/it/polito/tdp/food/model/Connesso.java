@@ -1,30 +1,29 @@
 package it.polito.tdp.food.model;
 
 public class Connesso {
-	private String tipo;
-	private double peso;
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-	public double getPeso() {
-		return peso;
-	}
-	public void setPeso(double peso) {
+	private String p;
+	private Double peso;
+	public Connesso(String p, Double peso) {
+		super();
+		this.p = p;
 		this.peso = peso;
 	}
-	public Connesso(String tipo, double peso) {
-		super();
-		this.tipo = tipo;
+	public String getP() {
+		return p;
+	}
+	public void setP(String p) {
+		this.p = p;
+	}
+	public Double getPeso() {
+		return peso;
+	}
+	public void setPeso(Double peso) {
 		this.peso = peso;
 	}
 	@Override
 	public String toString() {
-		return tipo + " = " + peso + "\n";
+		return  p + ", peso=" + peso + "\n";
 	}
-	
 	
 	
 	

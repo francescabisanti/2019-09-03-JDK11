@@ -1,33 +1,35 @@
 package it.polito.tdp.food.model;
 
 public class Adiacenza {
-	private String tipo1;
-	private String tipo2;
-	private double peso;
-	public Adiacenza(String tipo1, String tipo2, double peso) {
-		super();
-		this.tipo1 = tipo1;
-		this.tipo2 = tipo2;
-		this.peso = peso;
+
+	private String p1;
+	private String p2;
+	private Double peso;
+	public String getP1() {
+		return p1;
 	}
-	public String getTipo1() {
-		return tipo1;
+	public void setP1(String p1) {
+		this.p1 = p1;
 	}
-	public void setTipo1(String tipo1) {
-		this.tipo1 = tipo1;
+	public String getP2() {
+		return p2;
 	}
-	public String getTipo2() {
-		return tipo2;
+	public void setP2(String p2) {
+		this.p2 = p2;
 	}
-	public void setTipo2(String tipo2) {
-		this.tipo2 = tipo2;
-	}
-	public double getPeso() {
+	public Double getPeso() {
 		return peso;
 	}
-	public void setPeso(double peso) {
+	public void setPeso(Double peso) {
 		this.peso = peso;
 	}
+	public Adiacenza(String p1, String p2, Double peso) {
+		super();
+		this.p1 = p1;
+		this.p2 = p2;
+		this.peso = peso;
+	}
+	
 	
 	
 }
