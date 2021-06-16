@@ -5,7 +5,10 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.food.model.Connesso;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,7 +43,7 @@ public class FoodController {
     private Button btnCammino; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxPorzioni"
-    private ComboBox<?> boxPorzioni; // Value injected by FXMLLoader
+    private ComboBox<String> boxPorzioni; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -48,13 +51,33 @@ public class FoodController {
     @FXML
     void doCammino(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco cammino peso massimo...");
+    	txtResult.appendText("Cerco cammino peso massimo...\n");
+    	String selezionato= boxPorzioni.getValue();
+    	String nS= this.txtPassi.getText();
+    	int n;
+    	try {
+    		n=Integer.parseInt(nS);
+    	}catch(NumberFormatException e) {
+    		this.txtResult.appendText("Inserisci un numero valido");
+    		return;
+    	}
+    	List<String> percorso=model.trovaPercorso(selezionato, n);
+    	for(String s: percorso) {
+    		this.txtResult.appendText(s+"\n");
+    	}
+    	
     }
 
     @FXML
     void doCorrelate(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco porzioni correlate...");
+    	txtResult.appendText("Cerco porzioni correlate...\n");
+    	String tipo= boxPorzioni.getValue();
+    	List <Connesso> connessi= model.getConnessi(tipo);
+    	for(Connesso c: connessi) {
+    		this.txtResult.appendText(c.toString());
+    	}
+    	
     	
     }
 
@@ -62,7 +85,20 @@ public class FoodController {
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Creazione grafo...");
+    	String cS= this.txtCalorie.getText();
+    	Double calorie;
+    	try {
+    		calorie=Double.parseDouble(cS);
+    	}catch(NumberFormatException e) {
+    		this.txtResult.setText("Inserisci un numero valido!");
+    		return;
+    	}
+    	this.model.creaGrafo(calorie);
+    	this.txtResult.appendText("#VERTICI: "+this.model.getNVertici()+"\n");
+    	this.txtResult.appendText("#ARCHI: "+this.model.getNArchi()+"\n");
     	
+    	this.boxPorzioni.getItems().addAll(model.getGrafo().vertexSet());
+    
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -79,5 +115,6 @@ public class FoodController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
     }
 }
