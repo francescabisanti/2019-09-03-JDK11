@@ -99,6 +99,7 @@ public class FoodController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	this.txtResult.appendText("ciao");
     	this.txtResult.clear();
     	String cS= this.txtCalorie.getText();
     	Integer cal;
